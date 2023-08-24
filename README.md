@@ -22,3 +22,10 @@ export WWWML_DEPLOYMENT=
 ```bash
 python -m wwwml
 ```
+
+## Dependency
+This tool currently call following command to get system information
+- sysstat
+  - iostat
+  - mpstat
+  - vmstat
