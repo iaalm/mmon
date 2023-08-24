@@ -8,7 +8,8 @@ from wwwml.tools import load_tools
 
 INIT_PROMPT = "My Linux server is slow. Use providered function to check the server."
 
-if __name__ == "__main__":
+
+def main():
     if "WWWML_DEPLOYMENT" in environ:
         llm = ChatOpenAI(temperature=0, deployment_id=environ["WWWML_DEPLOYMENT"])
     else:
@@ -19,3 +20,7 @@ if __name__ == "__main__":
         load_tools(llm), llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=True
     )
     agent.run(INIT_PROMPT)
+
+
+if __name__ == "__main__":
+    main()

@@ -23,6 +23,8 @@ export WWWML_DEPLOYMENT=gpt-35-turbo-16k
 ## Usage
 ```bash
 python -m wwwml
+# or
+wwwml
 ```
 
 ## Dependency

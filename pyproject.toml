@@ -33,6 +33,9 @@ dependencies = [
 homepage = "https://github.com/iaalm/wwwml"
 repository = "https://github.com/iaalm/wwwml"
 
+[project.scripts]
+wwwml = "wwwml.__main__:main"
+
 [tool.hatch.version]
 path = "wwwml/__about__.py"
 
