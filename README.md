@@ -1,4 +1,4 @@
-# wwwml [![PyPI version](https://badge.fury.io/py/wwwml.svg)](https://badge.fury.io/py/llama-api-server) [![Release Building](https://github.com/iaalm/wwwml/actions/workflows/release.yml/badge.svg)](https://github.com/iaalm/wwwml/actions/workflows/release.yml) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+# wwwml [![PyPI version](https://badge.fury.io/py/wwwml.svg)](https://badge.fury.io/py/wwwml) [![Release Building](https://github.com/iaalm/wwwml/actions/workflows/release.yml/badge.svg)](https://github.com/iaalm/wwwml/actions/workflows/release.yml) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 What's wrong with my linux? A LLM based tool to diagnose linux problems.
 
 ## Install
