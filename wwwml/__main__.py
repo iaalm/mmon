@@ -1,4 +1,5 @@
 import argparse
+import logging
 import sys
 from os import environ
 
@@ -34,6 +35,10 @@ def main():
         logger.add(sys.stderr, level="INFO", format=log_format)
     else:
         logger.add(sys.stderr, level="WARNING", format=log_format)
+
+    # avoid "WARNING! deployment_id is not default parameter."
+    langchain_logger = logging.getLogger("langchain.chat_models.openai")
+    langchain_logger.disabled = True
 
     if "WWWML_DEPLOYMENT" in environ:
         llm = ChatOpenAI(temperature=0, deployment_id=environ["WWWML_DEPLOYMENT"])
