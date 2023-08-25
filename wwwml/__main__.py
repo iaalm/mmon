@@ -11,7 +11,7 @@ from loguru import logger
 from wwwml.__about__ import __version__
 from wwwml.tools import load_tools
 
-INIT_PROMPT = "My Linux server is slow. Use providered function to check the server, then give a short (2-3) sentence description of the problem."
+INIT_PROMPT_TEMPLATE = "{} Use providered function to check the server, then give a short (2-3) sentence description of the problem."
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     )
     parser.add_argument(
         "-p",
-        default=INIT_PROMPT,
+        default="My Linux server is slow.",
         type=str,
         help="Initial prompt to start the conversation.",
     )
@@ -49,7 +49,8 @@ def main():
     agent = initialize_agent(
         load_tools(llm), llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=args.v > 1
     )
-    response = agent.run(args.p)
+    prompt = INIT_PROMPT_TEMPLATE.format(args.p)
+    response = agent.run(prompt)
 
     logger.info("=" * 24)
     print(response)
