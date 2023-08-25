@@ -10,7 +10,7 @@ from loguru import logger
 from wwwml.__about__ import __version__
 from wwwml.tools import load_tools
 
-INIT_PROMPT = "My Linux server is slow. Use providered function to check the server."
+INIT_PROMPT = "My Linux server is slow. Use providered function to check the server, then give a short (2-3) sentence description of the problem."
 
 
 def main():
