@@ -4,13 +4,13 @@ from langchain.tools import tool
 from loguru import logger
 
 
-def shell(cmd):
+def shell(cmd) -> str:
     output = subprocess.check_output(cmd, shell=True)
     return output
 
 
 @tool
-def iostat():
+def iostat() -> str:
     """iostat - Report Central Processing Unit (CPU) statistics and input/output statistics for devices and partitions."""
 
     logger.info("Checking IO")
@@ -18,7 +18,7 @@ def iostat():
 
 
 @tool
-def vmstat():
+def vmstat() -> str:
     """vmstat - Report virtual memory statistics."""
 
     logger.info("Checking Memory")
@@ -26,7 +26,7 @@ def vmstat():
 
 
 @tool
-def mpstat():
+def mpstat() -> str:
     """mpstat - Report processors related statistics."""
 
     logger.info("Checking CPU")
@@ -34,8 +34,13 @@ def mpstat():
 
 
 @tool
-def loadavg():
-    """uptime - Gives average load on system."""
+def cat(filename: str) -> str:
+    """cat - Read file. Only allow files in /proc and /sys"""
 
-    logger.info("Checking load")
-    return shell("uptime")
+    logger.info(f"Reading file {filename}")
+    if not filename.startswith("/proc/") and not filename.startswith("/sys/"):
+        logger.warning("try to read file not in /proc or /sys")
+        return ""
+
+    with open(filename, "r") as f:
+        return "\n".join(f.readlines())

@@ -1,7 +1,7 @@
 from langchain import LLMMathChain, OpenAI
 from langchain.agents import Tool, initialize_agent
 
-from wwwml.tools.sysstat import iostat, mpstat, vmstat
+from wwwml.tools.sysstat import cat, iostat, mpstat, vmstat
 
 
 def load_tools(llm, verbose=False):
@@ -14,4 +14,5 @@ def load_tools(llm, verbose=False):
         iostat,
         vmstat,
         mpstat,
+        cat,
     ]
