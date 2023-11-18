@@ -3,15 +3,15 @@ import logging
 import sys
 from os import environ
 
-import openai
-from langchain.agents import AgentType, Tool, initialize_agent
-from langchain.chat_models import ChatOpenAI
+from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from loguru import logger
 
-from wwwml.__about__ import __version__
-from wwwml.tools import load_tools
+from mon.__about__ import __version__
+from mon.engine import Engine
 
-INIT_PROMPT_TEMPLATE = "{} Use providered function to check the server, then give a short (2-3) sentence description of the problem."
+
+def get_input() -> str:
+    return input("> ")
 
 
 def main():
@@ -19,8 +19,9 @@ def main():
         description="What's wrong with my linux? v" + __version__
     )
     parser.add_argument(
-        "-p",
-        default="My Linux server is slow.",
+        "question",
+        default="",
+        nargs="?",
         type=str,
         help="Initial prompt to start the conversation.",
     )
@@ -40,20 +41,18 @@ def main():
     langchain_logger = logging.getLogger("langchain.chat_models.openai")
     langchain_logger.disabled = True
 
-    if "WWWML_DEPLOYMENT" in environ:
-        llm = ChatOpenAI(temperature=0, deployment_id=environ["WWWML_DEPLOYMENT"])
+    if "MON_DEPLOYMENT" in environ:
+        print(environ["MON_DEPLOYMENT"])
+        llm = ChatOpenAI(temperature=0, deployment_id=environ["MON_DEPLOYMENT"])
     else:
-        llm = ChatOpenAI(
-            temperature=0, model=environ.get("WWWML_MODEL", "gpt-3.5-turbo")
-        )
-    agent = initialize_agent(
-        load_tools(llm), llm, agent=AgentType.OPENAI_FUNCTIONS, verbose=args.v > 1
-    )
-    prompt = INIT_PROMPT_TEMPLATE.format(args.p)
-    response = agent.run(prompt)
+        llm = ChatOpenAI(temperature=0, model=environ.get("MON_MODEL", "gpt-3.5-turbo"))
 
-    logger.info("=" * 24)
-    print(response)
+    engine = engine = Engine(llm, args.v)
+    p = args.question or get_input()
+    while True:
+        response = engine.run(p)
+        print(response)
+        p = get_input()
 
 
 if __name__ == "__main__":

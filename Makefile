@@ -9,5 +9,5 @@ build:
 	python3 -m build
 
 format:
-	python3 -m isort --profile black wwwml
-	python3 -m black wwwml
+	python3 -m isort --profile black mon
+	python3 -m black mon

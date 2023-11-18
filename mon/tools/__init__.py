@@ -1,7 +1,6 @@
-from langchain import LLMMathChain, OpenAI
 from langchain.agents import Tool, initialize_agent
-
-from wwwml.tools.sysstat import cat, iostat, mpstat, vmstat
+from langchain.chains import LLMMathChain
+from langchain.llms import OpenAI
 
 
 def load_tools(llm, verbose=False):
@@ -11,8 +10,4 @@ def load_tools(llm, verbose=False):
             func=LLMMathChain.from_llm(llm=llm, verbose=verbose).run,
             description="useful for when you need to answer questions about math",
         ),
-        iostat,
-        vmstat,
-        mpstat,
-        cat,
     ]

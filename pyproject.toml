@@ -3,8 +3,8 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "wwwml"
-description = "What's wrong with my linux? A LLM based tool to diagnose linux problems."
+name = "mon"
+description = "A customizable chat bot."
 authors = [
     {name = "iaalm", email= "iaalmsimon@gmail.com"}
 ]
@@ -26,19 +26,19 @@ classifiers = [
 
 dependencies = [
   "langchain>=0.0.271",
-  "openai>=0.27.9",
+  "openai>=0.27.9,<1.0",
   "loguru",
 ]
 
 [project.urls]
-homepage = "https://github.com/iaalm/wwwml"
-repository = "https://github.com/iaalm/wwwml"
+homepage = "https://github.com/iaalm/mon"
+repository = "https://github.com/iaalm/mon"
 
 [project.scripts]
-wwwml = "wwwml.__main__:main"
+mon = "mon.__main__:main"
 
 [tool.hatch.version]
-path = "wwwml/__about__.py"
+path = "mon/__about__.py"
 
 [tool.isort]
 profile = "black"
