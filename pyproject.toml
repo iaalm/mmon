@@ -31,14 +31,14 @@ dependencies = [
 ]
 
 [project.urls]
-homepage = "https://github.com/iaalm/mon"
-repository = "https://github.com/iaalm/mon"
+homepage = "https://github.com/iaalm/mmon"
+repository = "https://github.com/iaalm/mmon"
 
 [project.scripts]
-mon = "mon.__main__:main"
+mmon = "mmon.__main__:main"
 
 [tool.hatch.version]
-path = "mon/__about__.py"
+path = "mmon/__about__.py"
 
 [tool.isort]
 profile = "black"

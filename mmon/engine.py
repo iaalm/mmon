@@ -1,7 +1,7 @@
 import openai
 from langchain.agents import AgentType, Tool, initialize_agent
 
-from mon.tools import load_tools
+from mmon.tools import load_tools
 
 # openai.log = "debug"
 

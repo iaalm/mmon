@@ -6,8 +6,8 @@ from os import environ
 from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from loguru import logger
 
-from mon.__about__ import __version__
-from mon.engine import Engine
+from mmon.__about__ import __version__
+from mmon.engine import Engine
 
 
 def get_input() -> str:
@@ -41,11 +41,13 @@ def main():
     langchain_logger = logging.getLogger("langchain.chat_models.openai")
     langchain_logger.disabled = True
 
-    if "MON_DEPLOYMENT" in environ:
-        print(environ["MON_DEPLOYMENT"])
-        llm = ChatOpenAI(temperature=0, deployment_id=environ["MON_DEPLOYMENT"])
+    if "MMON_DEPLOYMENT" in environ:
+        print(environ["MMON_DEPLOYMENT"])
+        llm = ChatOpenAI(temperature=0, deployment_id=environ["MMON_DEPLOYMENT"])
     else:
-        llm = ChatOpenAI(temperature=0, model=environ.get("MON_MODEL", "gpt-3.5-turbo"))
+        llm = ChatOpenAI(
+            temperature=0, model=environ.get("MMON_MODEL", "gpt-3.5-turbo")
+        )
 
     engine = engine = Engine(llm, args.v)
     p = args.question or get_input()
