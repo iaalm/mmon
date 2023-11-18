@@ -3,7 +3,7 @@ A customizable chat bot.
 
 ## Install
 ```bash
-pip install -U mon
+pip install -U mon-cli
 ```
 
 Set environment variable in your `~/.bashrc`, `~/.zshrc`, etc.

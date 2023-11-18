@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mon"
+name = "mon-cli"
 description = "A customizable chat bot."
 authors = [
     {name = "iaalm", email= "iaalmsimon@gmail.com"}
