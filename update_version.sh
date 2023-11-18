@@ -16,6 +16,6 @@ fi
 
 python -m hatch version $number
 v=$(python -m hatch version)
-git commit wwwml/__about__.py -m "Bump version to $v" --no-verify
+git commit mon/__about__.py -m "Bump version to $v" --no-verify
 git tag v$v
 git push origin HEAD --tags
