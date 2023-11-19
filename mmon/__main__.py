@@ -4,6 +4,7 @@ import logging
 import readline
 import sys
 from os import environ, path
+from typing import Optional
 
 from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from loguru import logger
@@ -24,11 +25,11 @@ def setup_readline():
     atexit.register(readline.write_history_file, histfile)
 
 
-def get_input() -> str:
+def get_input() -> Optional[str]:
     try:
         return input("> ")
     except EOFError:
-        return ""
+        return None
 
 
 def main():
@@ -67,9 +68,10 @@ def main():
     engine = engine = Engine(llm, args.v)
     setup_readline()
     p = args.question or get_input()
-    while len(p) > 0:
-        response = engine.run(p)
-        print(response + "\n")
+    while p is not None:
+        if len(p) > 0:
+            response = engine.run(p)
+            print(response + "\n")
         p = get_input()
 
 
