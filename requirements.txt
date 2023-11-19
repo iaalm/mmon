@@ -28,7 +28,7 @@ jaraco.classes==3.3.0
 jsonpatch==1.33
 jsonpointer==2.4
 keyring==24.2.0
--e git+ssh://git@github.com/iaalm/langchain.git@d6d491a42526994ed8d6d268cec951c90cb993e0#egg=langchain&subdirectory=libs/langchain
+langchain==0.0.338
 langsmith==0.0.65
 loguru==0.7.2
 markdown-it-py==3.0.0
