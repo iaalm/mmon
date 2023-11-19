@@ -2,6 +2,7 @@ import openai
 from langchain.agents.agent_toolkits import create_conversational_retrieval_agent
 from langchain.memory import ConversationBufferMemory
 
+from mmon.langchain_callback import LangChainCallbackHandler
 from mmon.tools import load_tools
 
 
@@ -18,7 +19,8 @@ class Engine:
             remember_intermediate_steps=False,
             verbose=verbose_level > 1,
         )
+        self.callbacks = [LangChainCallbackHandler()]
 
     def run(self, prompt: str) -> str:
-        response = self.executor.run(prompt)
+        response = self.executor.run(prompt, callbacks=self.callbacks)
         return response
