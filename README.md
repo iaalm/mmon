@@ -1,4 +1,4 @@
-# mmon 
+# mmon [![PyPI version](https://badge.fury.io/py/mmon.svg)](https://badge.fury.io/py/mmon) [![Release Building](https://github.com/iaalm/mmon/actions/workflows/release.yml/badge.svg)](https://github.com/iaalm/mmon/actions/workflows/release.yml)
 A customizable chat bot.
 
 ## Install
