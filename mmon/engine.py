@@ -7,7 +7,7 @@ from mmon.tools import load_tools
 
 class Engine:
     def __init__(self, llm, verbose_level=0):
-        tools = load_tools(llm)
+        tools = load_tools(llm, verbose_level)
         if verbose_level > 2:
             openai.log = "debug"
 
