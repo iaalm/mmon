@@ -14,8 +14,8 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-python -m hatch version $number
-v=$(python -m hatch version)
+python3 -m hatch version $number
+v=$(python3 -m hatch version)
 git commit mmon/__about__.py -m "Bump version to $v" --no-verify
 git tag v$v
 git push origin HEAD --tags
