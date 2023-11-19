@@ -1,7 +1,6 @@
 import argparse
 import atexit
 import logging
-import readline
 import sys
 from os import environ, path
 from typing import Optional
@@ -14,6 +13,14 @@ from mmon.engine import Engine
 
 
 def setup_readline():
+    try:
+        import readline
+    except ImportError:
+        logger.warning(
+            "Module readline not available. Please install 'readline' or 'pyreadline'."
+        )
+        return
+
     histfile = path.join(path.expanduser("~"), ".mmon_history")
     try:
         readline.read_history_file(histfile)
