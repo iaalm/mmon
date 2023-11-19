@@ -45,14 +45,14 @@ def main():
 
     logger.remove()
     log_format = "{message}"
-    if args.v > 2:
+    if args.v >= 2:
         logger.add(sys.stderr, level="DEBUG", format=log_format)
-    elif args.v > 0:
+    elif args.v >= 1:
         logger.add(sys.stderr, level="INFO", format=log_format)
     else:
         logger.add(sys.stderr, level="WARNING", format=log_format)
 
-    if args.v <= 2:
+    if args.v < 3:
         # avoid "WARNING! deployment_id is not default parameter."
         langchain_logger = logging.getLogger("langchain.chat_models.openai")
         langchain_logger.disabled = True

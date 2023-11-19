@@ -8,7 +8,7 @@ from mmon.tools import load_tools
 class Engine:
     def __init__(self, llm, verbose_level=0):
         tools = load_tools(llm, verbose_level)
-        if verbose_level > 2:
+        if verbose_level >= 3:
             openai.log = "debug"
 
         self.executor = create_conversational_retrieval_agent(
