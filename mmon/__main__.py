@@ -32,9 +32,7 @@ def get_input() -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="What's wrong with my linux? v" + __version__
-    )
+    parser = argparse.ArgumentParser(description="mmon v" + __version__)
     parser.add_argument(
         "question",
         default="",
@@ -42,7 +40,7 @@ def main():
         type=str,
         help="Initial prompt to start the conversation.",
     )
-    parser.add_argument("-v", action="count", default=0, help="verbose mode")
+    parser.add_argument("-v", action="count", default=0, help="verbose level")
     args = parser.parse_args()
 
     logger.remove()
