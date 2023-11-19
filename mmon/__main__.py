@@ -1,7 +1,9 @@
 import argparse
+import atexit
 import logging
+import readline
 import sys
-from os import environ
+from os import environ, path
 
 from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from loguru import logger
@@ -10,8 +12,23 @@ from mmon.__about__ import __version__
 from mmon.engine import Engine
 
 
+def setup_readline():
+    histfile = path.join(path.expanduser("~"), ".mmon_history")
+    try:
+        readline.read_history_file(histfile)
+        # default history len is -1 (infinite), which may grow unruly
+        readline.set_history_length(1000)
+    except FileNotFoundError:
+        pass
+
+    atexit.register(readline.write_history_file, histfile)
+
+
 def get_input() -> str:
-    return input("> ")
+    try:
+        return input("> ")
+    except EOFError:
+        return ""
 
 
 def main():
@@ -49,8 +66,9 @@ def main():
         )
 
     engine = engine = Engine(llm, args.v)
+    setup_readline()
     p = args.question or get_input()
-    while True:
+    while len(p) > 0:
         response = engine.run(p)
         print(response + "\n")
         p = get_input()

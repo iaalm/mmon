@@ -18,7 +18,7 @@ class Engine:
             tools,
             llm,
             agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
-            verbose=True,
+            verbose=verbose_level > 1,
             memory=memory,
         )
 
