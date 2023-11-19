@@ -2,7 +2,6 @@ from os import environ
 
 from langchain.agents import Tool, initialize_agent
 from langchain.chains import LLMMathChain
-from langchain.llms import OpenAI
 from langchain.utilities import BingSearchAPIWrapper
 from loguru import logger
 
