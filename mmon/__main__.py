@@ -54,9 +54,10 @@ def main():
     else:
         logger.add(sys.stderr, level="WARNING", format=log_format)
 
-    # avoid "WARNING! deployment_id is not default parameter."
-    langchain_logger = logging.getLogger("langchain.chat_models.openai")
-    langchain_logger.disabled = True
+    if args.v <= 2:
+        # avoid "WARNING! deployment_id is not default parameter."
+        langchain_logger = logging.getLogger("langchain.chat_models.openai")
+        langchain_logger.disabled = True
 
     if "MMON_DEPLOYMENT" in environ:
         llm = ChatOpenAI(temperature=0, deployment_id=environ["MMON_DEPLOYMENT"])
