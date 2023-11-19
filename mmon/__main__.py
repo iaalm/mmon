@@ -5,10 +5,10 @@ import sys
 from os import environ, path
 from typing import Optional
 
-from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from loguru import logger
 
 from mmon.__about__ import __version__
+from mmon.config import load_config
 from mmon.engine import Engine
 
 
@@ -49,6 +49,11 @@ def main():
         help="Initial prompt to start the conversation.",
     )
     parser.add_argument("-v", action="count", default=0, help="verbose level")
+    parser.add_argument(
+        "--gen_cfg",
+        action="store_true",
+        help="Regenerate config from environment variables.",
+    )
     args = parser.parse_args()
 
     logger.remove()
@@ -65,15 +70,9 @@ def main():
         langchain_logger = logging.getLogger("langchain.chat_models.openai")
         langchain_logger.disabled = True
 
-    if "MMON_DEPLOYMENT" in environ:
-        llm = ChatOpenAI(temperature=0, deployment_id=environ["MMON_DEPLOYMENT"])
-    else:
-        llm = ChatOpenAI(
-            temperature=0, model=environ.get("MMON_MODEL", "gpt-3.5-turbo")
-        )
-
-    engine = engine = Engine(llm, args.v)
+    load_config(gen_cfg=args.gen_cfg)
     setup_readline()
+    engine = Engine(verbose_level=args.v)
     p = args.question or get_input()
     while p is not None:
         if len(p) > 0:

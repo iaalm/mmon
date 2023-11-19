@@ -21,6 +21,7 @@ export OPENAI_API_VERSION=2023-07-01-preview
 # Use a deploymetn of gpt-3.5-turbo or gpt-4 with version 0613 or later
 export MMON_DEPLOYMENT=gpt-35-turbo-16k
 ```
+When you first run `mmon`, it will generate config file in `~/.mmon_cfg.json` based on the environment variable (and ignore environment variable afterward).
 
 ## Usage
 ```bash

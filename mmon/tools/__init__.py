@@ -5,8 +5,11 @@ from langchain.chains import LLMMathChain
 from langchain.utilities import BingSearchAPIWrapper
 from loguru import logger
 
+from mmon.config import load_config
+
 
 def load_tools(llm, verbose_level=0):
+    config = load_config()
     tools = [
         Tool(
             name="Calculator",
@@ -15,12 +18,10 @@ def load_tools(llm, verbose_level=0):
         ),
     ]
 
-    if "BING_SUBSCRIPTION_KEY" in environ:
-        url = environ.get(
-            "BING_SEARCH_URL", "https://api.bing.microsoft.com/v7.0/search"
+    if len(config.bing.key) > 0:
+        search = BingSearchAPIWrapper(
+            bing_subscription_key=config.bing.key, bing_search_url=config.bing.url
         )
-        key = environ["BING_SUBSCRIPTION_KEY"]
-        search = BingSearchAPIWrapper(bing_subscription_key=key, bing_search_url=url)
         tools.append(
             Tool(
                 name="BingSearch",
