@@ -42,7 +42,6 @@ def main():
     langchain_logger.disabled = True
 
     if "MMON_DEPLOYMENT" in environ:
-        print(environ["MMON_DEPLOYMENT"])
         llm = ChatOpenAI(temperature=0, deployment_id=environ["MMON_DEPLOYMENT"])
     else:
         llm = ChatOpenAI(
@@ -53,7 +52,7 @@ def main():
     p = args.question or get_input()
     while True:
         response = engine.run(p)
-        print(response)
+        print(response + "\n")
         p = get_input()
 
 
