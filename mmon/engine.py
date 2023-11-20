@@ -44,3 +44,7 @@ class Engine:
     def run(self, prompt: str) -> str:
         response = self.executor.run(prompt, callbacks=self.callbacks)
         return response
+
+    def stream(self, prompt: str) -> str:
+        response = self.executor.stream(prompt)
+        return response

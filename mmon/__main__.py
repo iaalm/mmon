@@ -48,7 +48,8 @@ def main():
         type=str,
         help="Initial prompt to start the conversation.",
     )
-    parser.add_argument("-v", action="count", default=0, help="verbose level")
+    parser.add_argument("-v", action="count", default=0, help="verbose level.")
+    parser.add_argument("-s", action="store_true", help="enable streaming.")
     parser.add_argument(
         "--gen_cfg",
         action="store_true",
@@ -76,8 +77,13 @@ def main():
     p = args.question or get_input()
     while p is not None:
         if len(p) > 0:
-            response = engine.run(p)
-            print(response + "\n")
+            if args.s:
+                for chrunk in engine.stream(p):
+                    print(chrunk["output"], end="", flush=True)
+                print("\n")
+            else:
+                response = engine.run(p)
+                print(response + "\n")
         p = get_input()
 
 
