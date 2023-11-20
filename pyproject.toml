@@ -31,6 +31,7 @@ dependencies = [
   "loguru",
   "numexpr",
   "pydantic",
+  "colorama",
 ]
 
 [project.urls]

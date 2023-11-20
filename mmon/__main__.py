@@ -5,6 +5,7 @@ import sys
 from os import environ, path
 from typing import Optional
 
+import colorama
 from loguru import logger
 
 from mmon.__about__ import __version__
@@ -12,12 +13,19 @@ from mmon.config import load_config
 from mmon.engine import Engine
 
 
-def setup_readline():
+def setup_console():
+    config = load_config()
+    if config.general.color:
+        colorama.init()
+
+    if not config.general.use_readline:
+        return
+
     try:
         import readline
     except ImportError:
         logger.warning(
-            "Module readline not available. Please install 'readline' or 'pyreadline'."
+            "Module readline not available. Please install 'readline' or 'pyreadline'. Or disable readline in config."
         )
         return
 
@@ -33,10 +41,29 @@ def setup_readline():
 
 
 def get_input() -> Optional[str]:
+    config = load_config()
+    if config.general.color:
+        prompt = colorama.Style.RESET_ALL + "> " + colorama.Fore.GREEN
+    else:
+        prompt = "> "
+
     try:
-        return input("> ")
+        return input(prompt)
     except EOFError:
         return None
+    finally:
+        print(colorama.Style.RESET_ALL, flush=True, end="")
+
+
+def put_output(output: str):
+    config = load_config()
+    if config.general.color:
+        prefix = colorama.Fore.CYAN
+        suffix = colorama.Style.RESET_ALL
+    else:
+        prefix = ""
+        suffix = ""
+    print(prefix + output + suffix, flush=True, end="")
 
 
 def main():
@@ -49,7 +76,6 @@ def main():
         help="Initial prompt to start the conversation.",
     )
     parser.add_argument("-v", action="count", default=0, help="verbose level.")
-    parser.add_argument("-s", action="store_true", help="enable streaming.")
     parser.add_argument(
         "--gen_cfg",
         action="store_true",
@@ -71,19 +97,19 @@ def main():
         langchain_logger = logging.getLogger("langchain.chat_models.openai")
         langchain_logger.disabled = True
 
-    load_config(gen_cfg=args.gen_cfg)
-    setup_readline()
+    config = load_config(gen_cfg=args.gen_cfg)
+    setup_console()
     engine = Engine(verbose_level=args.v)
     p = args.question or get_input()
     while p is not None:
         if len(p) > 0:
-            if args.s:
+            if config.general.streaming:
                 for chrunk in engine.stream(p):
-                    print(chrunk["output"], end="", flush=True)
-                print("\n")
+                    put_output(chrunk["output"])
+                put_output("\n\n")
             else:
                 response = engine.run(p)
-                print(response + "\n")
+                put_output(response + "\n\n")
         p = get_input()
 
 

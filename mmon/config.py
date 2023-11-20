@@ -2,7 +2,13 @@ from functools import cache
 from os import environ, path
 
 from loguru import logger
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+
+
+class GerneralConfig(BaseModel):
+    streaming: bool = Field(default_factory=lambda: False)
+    use_readline: bool = Field(default_factory=lambda: True)
+    color: bool = Field(default_factory=lambda: True)
 
 
 class LLMConfig(BaseModel):
@@ -20,6 +26,7 @@ class BingConfig(BaseModel):
 
 
 class AppConfig(BaseModel):
+    general: GerneralConfig
     llm: LLMConfig
     bing: BingConfig
 
@@ -27,6 +34,7 @@ class AppConfig(BaseModel):
 def generate_config(rcfile):
     logger.warning("Generating config file.")
     config = AppConfig(
+        general=GerneralConfig(),
         llm=LLMConfig(
             openai_api_type=environ.get("OPENAI_API_TYPE", "openai"),
             openai_api_base=environ.get("OPENAI_API_BASE", "https://api.openai.com"),
@@ -55,4 +63,12 @@ def load_config(gen_cfg=False):
         generate_config(rcfile)
 
     with open(rcfile, "r") as fd:
-        return AppConfig.model_validate_json(fd.read())
+        content = fd.read().strip()
+        config = AppConfig.model_validate_json(content)
+    new_content = config.model_dump_json(indent=4)
+    if content != new_content:
+        logger.warning("Updating config file.")
+        with open(rcfile, "w") as fd:
+            print(new_content, file=fd)
+
+    return config
