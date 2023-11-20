@@ -41,9 +41,20 @@ def setup_console():
 
 
 def get_input() -> Optional[str]:
+    # https://stackoverflow.com/questions/9468435/how-to-fix-column-calculation-in-python-readline-if-using-color-prompt
+    RL_PROMPT_START_IGNORE = "\001"
+    RL_PROMPT_END_IGNORE = "\002"
     config = load_config()
     if config.general.color:
-        prompt = colorama.Style.RESET_ALL + "> " + colorama.Fore.GREEN
+        prompt = (
+            RL_PROMPT_START_IGNORE
+            + colorama.Style.RESET_ALL
+            + RL_PROMPT_END_IGNORE
+            + "> "
+            + RL_PROMPT_START_IGNORE
+            + colorama.Fore.GREEN
+            + RL_PROMPT_END_IGNORE
+        )
     else:
         prompt = "> "
 
