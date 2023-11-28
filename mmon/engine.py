@@ -1,6 +1,7 @@
 from typing import Any, Iterator, List, Optional
 
 import openai
+from langchain.agents.agent import AgentExecutor
 from langchain.agents.agent_toolkits import create_conversational_retrieval_agent
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
@@ -29,6 +30,9 @@ def get_llm() -> ChatOpenAI:
 
 
 class Engine:
+    executor: AgentExecutor
+    callbacks: List[BaseCallbackHandler]
+
     def __init__(self, llm: Optional[BaseChatModel] = None, verbose_level: int = 0):
         if llm is None:
             llm = get_llm()
@@ -43,7 +47,7 @@ class Engine:
             remember_intermediate_steps=False,
             verbose=verbose_level > 1,
         )
-        self.callbacks: List[BaseCallbackHandler] = [LangChainCallbackHandler()]
+        self.callbacks = [LangChainCallbackHandler()]
 
     def run(self, prompt: str) -> str:
         response: str = self.executor.run(prompt, callbacks=self.callbacks)
