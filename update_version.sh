@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# available options under https://hatch.pypa.io/latest/version/
 number="${1:-"minor"}"
 echo Updating $number
 
