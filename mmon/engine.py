@@ -1,6 +1,10 @@
+from typing import Any, Iterator, List, Optional
+
 import openai
 from langchain.agents.agent_toolkits import create_conversational_retrieval_agent
+from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
+from langchain.chat_models.base import BaseChatModel
 from langchain.memory import ConversationBufferMemory
 
 from mmon.config import load_config
@@ -8,7 +12,7 @@ from mmon.langchain_callback import LangChainCallbackHandler
 from mmon.tools import load_tools
 
 
-def get_llm():
+def get_llm() -> ChatOpenAI:
     config = load_config()
     common_openai_params = {
         "temperature": 0,
@@ -18,19 +22,19 @@ def get_llm():
         "base_url": config.llm.openai_api_base,
     }
     if len(config.llm.deployment_id) > 0:
-        llm = ChatOpenAI(deployment_id=config.llm.deployment_id, **common_openai_params)
+        llm = ChatOpenAI(deployment_id=config.llm.deployment_id, **common_openai_params)  # type: ignore[arg-type,call-arg]
     else:
-        llm = ChatOpenAI(model=config.llm.model, **common_openai_params)
+        llm = ChatOpenAI(model=config.llm.model, **common_openai_params)  # type: ignore[arg-type]
     return llm
 
 
 class Engine:
-    def __init__(self, llm=None, verbose_level=0):
+    def __init__(self, llm: Optional[BaseChatModel] = None, verbose_level: int = 0):
         if llm is None:
             llm = get_llm()
         tools = load_tools(llm, verbose_level)
         if verbose_level >= 3:
-            openai.log = "debug"
+            openai.log = "debug"  # type: ignore[assignment]
 
         self.executor = create_conversational_retrieval_agent(
             llm=llm,
@@ -39,12 +43,14 @@ class Engine:
             remember_intermediate_steps=False,
             verbose=verbose_level > 1,
         )
-        self.callbacks = [LangChainCallbackHandler()]
+        self.callbacks: List[BaseCallbackHandler] = [LangChainCallbackHandler()]
 
     def run(self, prompt: str) -> str:
-        response = self.executor.run(prompt, callbacks=self.callbacks)
+        response: str = self.executor.run(prompt, callbacks=self.callbacks)
         return response
 
-    def stream(self, prompt: str) -> str:
-        response = self.executor.stream(prompt)
+    def stream(self, prompt: str) -> Iterator[dict[str, Any]]:
+        # just input prompt without prep_inputs is work, but can't pass type check
+        inputs = self.executor.prep_inputs(prompt)
+        response = self.executor.stream(inputs, callbacks=self.callbacks)
         return response

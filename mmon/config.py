@@ -51,7 +51,7 @@ class AppConfig(BaseModel):
     bing: BingConfig = Field(default_factory=BingConfig)
 
 
-def generate_config(rcfile):
+def generate_config(rcfile: str) -> None:
     logger.warning("Generating config file.")
     config = AppConfig()
     with open(rcfile, "w") as fd:
@@ -59,7 +59,7 @@ def generate_config(rcfile):
 
 
 @cache
-def load_config(gen_cfg=False):
+def load_config(gen_cfg: bool = False) -> AppConfig:
     rcfile = path.join(path.expanduser("~"), ".mmon_cfg.json")
     if not path.exists(rcfile) or gen_cfg:
         generate_config(rcfile)

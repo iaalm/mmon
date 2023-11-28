@@ -13,7 +13,7 @@ from mmon.config import load_config
 from mmon.engine import Engine
 
 
-def setup_console():
+def setup_console() -> None:
     config = load_config()
     if config.general.color:
         colorama.init()
@@ -66,7 +66,7 @@ def get_input() -> Optional[str]:
         print(colorama.Style.RESET_ALL, flush=True, end="")
 
 
-def put_output(output: str):
+def put_output(output: str) -> None:
     config = load_config()
     if config.general.color:
         prefix = colorama.Fore.CYAN
@@ -77,7 +77,7 @@ def put_output(output: str):
     print(prefix + output + suffix, flush=True, end="")
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="mmon v" + __version__)
     parser.add_argument(
         "question",
