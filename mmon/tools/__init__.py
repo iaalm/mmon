@@ -5,7 +5,7 @@ from langchain.agents import Tool, initialize_agent
 from langchain.chains import LLMMathChain
 from langchain.chat_models.base import BaseChatModel
 from langchain.tools.base import BaseTool
-from langchain.utilities import BingSearchAPIWrapper
+from langchain_community.utilities import BingSearchAPIWrapper
 from loguru import logger
 
 from mmon.config import load_config

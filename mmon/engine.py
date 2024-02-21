@@ -4,9 +4,9 @@ import openai
 from langchain.agents.agent import AgentExecutor
 from langchain.agents.agent_toolkits import create_conversational_retrieval_agent
 from langchain.callbacks.base import BaseCallbackHandler
-from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
 from langchain.chat_models.base import BaseChatModel
 from langchain.memory import ConversationBufferMemory
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
 
 from mmon.config import load_config
 from mmon.langchain_callback import LangChainCallbackHandler
@@ -17,15 +17,13 @@ def get_llm() -> ChatOpenAI:
     config = load_config()
     common_openai_params = {
         "temperature": 0,
-        "api_type": config.llm.openai_api_type,
         "api_key": config.llm.openai_api_key,
         "api_version": config.llm.openai_api_version,
-        "base_url": config.llm.openai_api_base,
     }
     if len(config.llm.deployment_id) > 0:
-        llm = ChatOpenAI(deployment_id=config.llm.deployment_id, **common_openai_params)  # type: ignore[arg-type,call-arg]
+        llm = AzureChatOpenAI(azure_endpoint=config.llm.openai_api_base, deployment_name=config.llm.deployment_id, **common_openai_params)  # type: ignore[arg-type,call-arg]
     else:
-        llm = ChatOpenAI(model=config.llm.model, **common_openai_params)  # type: ignore[arg-type]
+        llm = ChatOpenAI(base_url=config.llm.openai_api_base, model=config.llm.model, **common_openai_params)  # type: ignore[arg-type]
     return llm
 
 
@@ -50,7 +48,7 @@ class Engine:
         self.callbacks = [LangChainCallbackHandler()]
 
     def run(self, prompt: str) -> str:
-        response: str = self.executor.run(prompt, callbacks=self.callbacks)
+        response: str = self.executor.invoke(prompt, callbacks=self.callbacks)
         return response
 
     def stream(self, prompt: str) -> Iterator[dict[str, Any]]:

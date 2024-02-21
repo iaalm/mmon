@@ -17,7 +17,8 @@ class LLMConfig(BaseModel):
     )
     openai_api_base: str = Field(
         default_factory=lambda: environ.get(
-            "OPENAI_API_BASE", "https://api.openai.com"
+            "AZURE_OPENAI_ENDPOINT",
+            environ.get("OPENAI_API_BASE", "https://api.openai.com"),
         ),
     )
     openai_api_key: str = Field(
