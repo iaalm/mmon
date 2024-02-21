@@ -49,7 +49,10 @@ class Engine:
 
     def run(self, prompt: str) -> str:
         response: str = self.executor.invoke(prompt, callbacks=self.callbacks)
-        return response
+        if "output" not in response:
+            raise ValueError(f"Invalid response: {response}")
+
+        return response["output"]
 
     def stream(self, prompt: str) -> Iterator[dict[str, Any]]:
         # just input prompt without prep_inputs is work, but can't pass type check
