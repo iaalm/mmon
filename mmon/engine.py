@@ -20,10 +20,19 @@ def get_llm() -> ChatOpenAI:
         "api_key": config.llm.openai_api_key,
         "api_version": config.llm.openai_api_version,
     }
+    llm: ChatOpenAI
     if len(config.llm.deployment_id) > 0:
-        llm = AzureChatOpenAI(azure_endpoint=config.llm.openai_api_base, deployment_name=config.llm.deployment_id, **common_openai_params)  # type: ignore[arg-type,call-arg]
+        llm = AzureChatOpenAI(
+            azure_endpoint=config.llm.openai_api_base,
+            deployment_name=config.llm.deployment_id,
+            **common_openai_params,  # type: ignore[arg-type,call-arg]
+        )
     else:
-        llm = ChatOpenAI(base_url=config.llm.openai_api_base, model=config.llm.model, **common_openai_params)  # type: ignore[arg-type]
+        llm = ChatOpenAI(
+            base_url=config.llm.openai_api_base,
+            model=config.llm.model,
+            **common_openai_params,  # type: ignore[arg-type]
+        )
     return llm
 
 
@@ -36,7 +45,7 @@ class Engine:
             llm = get_llm()
         tools = load_tools(llm, verbose_level)
         if verbose_level >= 3:
-            openai.log = "debug"  # type: ignore[assignment]
+            openai.log = "debug"  # type: ignore[attr-defined]
 
         self.executor = create_conversational_retrieval_agent(
             llm=llm,
@@ -48,8 +57,11 @@ class Engine:
         self.callbacks = [LangChainCallbackHandler()]
 
     def run(self, prompt: str) -> str:
-        response: str = self.executor.invoke(prompt, callbacks=self.callbacks)
-        if "output" not in response:
+        response: dict[str, Any] = self.executor.invoke(
+            {"input": prompt}, callbacks=self.callbacks
+        )
+
+        if "output" not in response or not isinstance(response["output"], str):
             raise ValueError(f"Invalid response: {response}")
 
         return response["output"]
