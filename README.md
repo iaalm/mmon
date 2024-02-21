@@ -14,8 +14,8 @@ export OPENAI_API_KEY=sk~XXXXXXXX
 ```
 Or, to use Azure OpenAI endpoint, set following environment variable:
 ```bash
+export AZURE_OPENAI_ENDPOINT=https://XXXXXX.openai.azure.com/
 export OPENAI_API_KEY=XXXXXXXXXX
-export OPENAI_API_BASE=https://XXXXXX.openai.azure.com/
 export OPENAI_API_TYPE=azure
 export OPENAI_API_VERSION=2023-07-01-preview
 # Use a deploymetn of gpt-3.5-turbo or gpt-4 with version 0613 or later
