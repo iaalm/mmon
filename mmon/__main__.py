@@ -78,7 +78,7 @@ def put_output(output: str) -> None:
     print(prefix + output + suffix, flush=True, end="")
 
 
-async def main() -> None:
+async def amain() -> None:
     parser = argparse.ArgumentParser(description="mmon v" + __version__)
     parser.add_argument(
         "question",
@@ -125,5 +125,9 @@ async def main() -> None:
         p = get_input()
 
 
+def main() -> None:
+    asyncio.run(amain())
+
+
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
