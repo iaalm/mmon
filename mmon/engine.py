@@ -1,4 +1,4 @@
-from typing import Any, Iterator, List, Optional
+from typing import Any, AsyncIterator, List, Optional
 
 import openai
 from langchain.agents.agent import AgentExecutor
@@ -6,6 +6,8 @@ from langchain.agents.agent_toolkits import create_conversational_retrieval_agen
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chat_models.base import BaseChatModel
 from langchain.memory import ConversationBufferMemory
+from langchain_core.runnables import RunnableConfig
+from langchain_core.runnables.utils import AddableDict
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
 
 from mmon.config import load_config
@@ -56,8 +58,8 @@ class Engine:
         )
         self.callbacks = [LangChainCallbackHandler()]
 
-    def run(self, prompt: str) -> str:
-        response: dict[str, Any] = self.executor.invoke(
+    async def arun(self, prompt: str) -> str:
+        response: dict[str, Any] = await self.executor.ainvoke(
             {"input": prompt}, callbacks=self.callbacks
         )
 
@@ -66,8 +68,10 @@ class Engine:
 
         return response["output"]
 
-    def stream(self, prompt: str) -> Iterator[dict[str, Any]]:
+    def astream(self, prompt: str) -> AsyncIterator[AddableDict]:
         # just input prompt without prep_inputs is work, but can't pass type check
         inputs = self.executor.prep_inputs(prompt)
-        response = self.executor.stream(inputs, callbacks=self.callbacks)
+        response = self.executor.astream(
+            inputs, RunnableConfig(callbacks=self.callbacks)
+        )
         return response

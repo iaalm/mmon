@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 import atexit
 import logging
 import sys
@@ -77,7 +78,7 @@ def put_output(output: str) -> None:
     print(prefix + output + suffix, flush=True, end="")
 
 
-def main() -> None:
+async def main() -> None:
     parser = argparse.ArgumentParser(description="mmon v" + __version__)
     parser.add_argument(
         "question",
@@ -115,14 +116,14 @@ def main() -> None:
     while p is not None:
         if len(p) > 0:
             if config.general.streaming:
-                for chrunk in engine.stream(p):
+                async for chrunk in engine.astream(p):
                     put_output(chrunk["output"])
                 put_output("\n\n")
             else:
-                response = engine.run(p)
+                response = await engine.arun(p)
                 put_output(response + "\n\n")
         p = get_input()
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
