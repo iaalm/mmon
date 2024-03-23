@@ -117,7 +117,8 @@ async def amain() -> None:
         if len(p) > 0:
             if config.general.streaming:
                 async for chrunk in engine.astream(p):
-                    put_output(chrunk["output"])
+                    logger.debug(f"chrunk received, {chrunk}")
+                    put_output(chrunk.get("output", ""))
                 put_output("\n\n")
             else:
                 response = await engine.arun(p)
