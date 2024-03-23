@@ -40,6 +40,15 @@ dependencies = [
   "colorama",
 ]
 
+[project.optional-dependencies]
+dev = [
+  "hatch",
+  "build",
+  "isort",
+  "black",
+  "mypy",
+]
+
 [project.urls]
 homepage = "https://github.com/iaalm/mmon"
 repository = "https://github.com/iaalm/mmon"
