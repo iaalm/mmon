@@ -9,6 +9,7 @@ from langchain.memory import ConversationBufferMemory
 from langchain_core.runnables import RunnableConfig
 from langchain_core.runnables.utils import AddableDict
 from langchain_openai import AzureChatOpenAI, ChatOpenAI
+from loguru import logger
 
 from mmon.config import load_config
 from mmon.langchain_callback import LangChainCallbackHandler
@@ -24,12 +25,14 @@ def get_llm() -> ChatOpenAI:
     }
     llm: ChatOpenAI
     if len(config.llm.deployment_id) > 0:
+        logger.info(f"Using AzureOpenAI {config.llm.deployment_id}")
         llm = AzureChatOpenAI(
             azure_endpoint=config.llm.openai_api_base,
             deployment_name=config.llm.deployment_id,
             **common_openai_params,  # type: ignore[arg-type,call-arg]
         )
     else:
+        logger.info(f"Using OpenAI {config.llm.model}")
         llm = ChatOpenAI(
             base_url=config.llm.openai_api_base,
             model=config.llm.model,
