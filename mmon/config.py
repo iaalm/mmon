@@ -60,8 +60,8 @@ def generate_config(rcfile: str) -> None:
 
 
 @cache
-def load_config(gen_cfg: bool = False) -> AppConfig:
-    rcfile = path.join(path.expanduser("~"), ".mmon_cfg.json")
+def load_config(cfg_file: str = "", gen_cfg: bool = False) -> AppConfig:
+    rcfile = cfg_file if cfg_file else path.join(path.expanduser("~"), ".mmon_cfg.json")
     if not path.exists(rcfile) or gen_cfg:
         generate_config(rcfile)
 

@@ -89,6 +89,11 @@ async def amain() -> None:
     )
     parser.add_argument("-v", action="count", default=0, help="verbose level.")
     parser.add_argument(
+        "-c",
+        default="",
+        help="Configuration file path. if not provided, use `~/.mmon_cfg.json` .",
+    )
+    parser.add_argument(
         "--gen_cfg",
         action="store_true",
         help="Regenerate config from environment variables.",
